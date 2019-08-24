@@ -1,0 +1,22 @@
+.header {
+	font-family: Arial, sans-serif;
+	font-size: 20pt;
+	font-weight: bold;
+	color: green;
+	line-height: 50pt;
+}
+
+th {
+	text-align: left;
+	padding-right: 5pt;
+	color: green;
+}
+
+td {
+	vertical-align: top;
+	padding-right: 5pt;
+}
+
+.errorMessage {
+	color: red;
+}
