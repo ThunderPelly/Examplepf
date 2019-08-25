@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.hftm.model.Company;
+import ch.hftm.persistence.CompanyPersistence;
 
 public class CompanyCatalog {
 
 	private static CompanyCatalog instance;
+	private CompanyPersistence persistence = new CompanyPersistence();
 	private List<Company> companies = new ArrayList<Company>();
 
 	public static CompanyCatalog getInstance() {
@@ -22,12 +24,16 @@ public class CompanyCatalog {
 	}
 
 	private CompanyCatalog() {
-		companies.add(new Company(01, "Lamborghini", 1963, "Italy"));
-		companies.add(new Company(02, "BMW", 1916, "Germany"));
-		companies.add(new Company(03, "Ferrari", 1947, "Italy"));
-		companies.add(new Company(04, "Renault", 1899, "France"));
-		companies.add(new Company(05, "Alfa Romeo", 1910, "Italy"));
-		companies.add(new Company(06, "Maserati", 1914, "Italy"));
+		persistence.insert(new Company(1,"Lamborghini", 1963, "Italy"));
+
+		companies = persistence.getAll();
+		System.out.println(companies.size());
+//		companies.add(new Company(01, "Lamborghini", 1963, "Italy"));
+//		companies.add(new Company(02, "BMW", 1916, "Germany"));
+//		companies.add(new Company(03, "Ferrari", 1947, "Italy"));
+//		companies.add(new Company(04, "Renault", 1899, "France"));
+//		companies.add(new Company(05, "Alfa Romeo", 1910, "Italy"));
+//		companies.add(new Company(06, "Maserati", 1914, "Italy"));
 	}
 
 	public List<Company> getAllCompanies() {
