@@ -26,7 +26,9 @@ public class CompanyPersistence {
 	}
 
 	public void insert(Company company) {
+		entityManager.getTransaction().begin();
 		this.entityManager.persist(company);
+		entityManager.getTransaction().commit();
 	}
 
 	public Company findById(long id) {
@@ -34,10 +36,12 @@ public class CompanyPersistence {
 	}
 
 	public void delete(long id) {
+		entityManager.getTransaction().begin();
 		Company company = findById(id);
 		if (company != null) {
 			this.entityManager.remove(company);
 		}
+		entityManager.getTransaction().commit();
 	}
 
 	public List<Company> getAll() {
