@@ -3,7 +3,6 @@ package ch.hftm.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -12,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class Company {
 
     @Id
-    @GeneratedValue(generator ="increment")
+    @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy="increment")
     @Column(name = "companyId")
 	private long id;
