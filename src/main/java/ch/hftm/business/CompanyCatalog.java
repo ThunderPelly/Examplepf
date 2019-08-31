@@ -24,16 +24,14 @@ public class CompanyCatalog {
 	}
 
 	private CompanyCatalog() {
-		persistence.insert(new Company(1,"Lamborghini", 1963, "Italy"));
+		persistence.insert(new Company("Lamborghini", 1963, "Italy"));
+		persistence.insert(new Company("BMW", 1916, "Germany"));
+		persistence.insert(new Company("Ferrari", 1947, "Italy"));
+		persistence.insert(new Company("Renault", 1899, "France"));
+		persistence.insert(new Company("Alfa Romeo", 1910, "Italy"));
+		persistence.insert(new Company("Maserati", 1914, "Italy"));
 
 		companies = persistence.getAll();
-		System.out.println(companies.size());
-//		companies.add(new Company(01, "Lamborghini", 1963, "Italy"));
-//		companies.add(new Company(02, "BMW", 1916, "Germany"));
-//		companies.add(new Company(03, "Ferrari", 1947, "Italy"));
-//		companies.add(new Company(04, "Renault", 1899, "France"));
-//		companies.add(new Company(05, "Alfa Romeo", 1910, "Italy"));
-//		companies.add(new Company(06, "Maserati", 1914, "Italy"));
 	}
 
 	public List<Company> getAllCompanies() {
@@ -49,6 +47,13 @@ public class CompanyCatalog {
 		return null;
 	}
 
+	public synchronized List<Company> addCompany(Company company){
+		companies.add(company);
+		persistence.insert(company);
+		companies = persistence.getAll();
+		return companies;
+	}
+
 	public synchronized List<Company> searchCompany(String name, String origin) throws Exception {
 		if (name.isEmpty() && origin.isEmpty()) {
 			throw new Exception();
@@ -58,8 +63,8 @@ public class CompanyCatalog {
 
 		List<Company> results = new ArrayList<Company>();
 		for (Company company : companies) {
-			if (company.getName().toLowerCase().indexOf(name) >= 0 &&
-					company.getOrigin().toLowerCase().indexOf(origin) >= 0
+			if (company.getName().toLowerCase().contains(name) &&
+					company.getOrigin().toLowerCase().contains(origin)
 					) {
 				results.add(clone(company));
 			}

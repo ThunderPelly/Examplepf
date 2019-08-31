@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.AjaxBehaviorListener;
 import javax.inject.Named;
 
 import ch.hftm.business.CompanyCatalog;
@@ -23,12 +24,15 @@ public class CompanyCatalogBean implements Serializable {
 	private String name = "";
 	private int founded;
 	private String origin ="";
-	private List<Company> companies = new ArrayList<Company>();
+	private List<Company> filteredCompanies = new ArrayList<>();
 	private String message;
 	private static final int MIN_SEARCH_LENGTH = 2;
 
+	private Company company = new Company();
+
 	public CompanyCatalogBean() {
-		this.companies = companyCatalog.getAllCompanies();
+
+		this.filteredCompanies = companyCatalog.getAllCompanies();
 	}
 	
 	public String getName() {
@@ -55,12 +59,12 @@ public class CompanyCatalogBean implements Serializable {
 		this.origin = origin;
 	}
 
-	public List<Company> getCompanies() {
-		return companies;
+	public List<Company> getFilteredCompanies() {
+		return filteredCompanies;
 	}
 
-	public void setCompanies(List<Company> companies) {
-		this.companies = companies;
+	public void setFilteredCompanies(List<Company> filteredCompanies) {
+		this.filteredCompanies = filteredCompanies;
 	}
 
 	public String getMessage() {
@@ -83,12 +87,25 @@ public class CompanyCatalogBean implements Serializable {
 		this.selectedCompany = selectedCompany;
 	}
 
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public void addCompanyBySubmit(AjaxBehaviorEvent ev){
+		filteredCompanies = companyCatalog.addCompany(company);
+		message = "added company";
+		company = new Company();
+	}
+
 	public String searchCompanies() {
-		companies.clear();
 		message = null;
 		try {
-			companies = companyCatalog.searchCompany(name, origin);
-			if (companies.isEmpty()) {
+			filteredCompanies = companyCatalog.searchCompany(name, origin);
+			if (filteredCompanies.isEmpty()) {
 				message = "No matching company found";
 			} else {
 				return null;
@@ -100,10 +117,13 @@ public class CompanyCatalogBean implements Serializable {
 	}
 
 	public void searchCompaniesByTiping(AjaxBehaviorEvent ev) {
-		companies.clear();
 		message = null;
 		if (name.length() > MIN_SEARCH_LENGTH || origin.length() > MIN_SEARCH_LENGTH) {
 			searchCompanies();
+		}
+		else {
+			message = "waiting for more search criteria...";
+			filteredCompanies = getAllCompanies();
 		}
 	}
 

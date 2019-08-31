@@ -12,8 +12,8 @@ import org.hibernate.annotations.GenericGenerator;
 public class Company {
 
     @Id
-    //@GeneratedValue(generator ="increment")
-    //@GenericGenerator(name = "increment", strategy="increment")
+    @GeneratedValue(generator ="increment")
+    @GenericGenerator(name = "increment", strategy="increment")
     @Column(name = "companyId")
 	private long id;
 	private String name;
@@ -24,8 +24,7 @@ public class Company {
 
 	}
 
-	public Company(long id, String name, int founded, String origin) {
-		this.id = id;
+	public Company(String name, int founded, String origin) {
 		this.name = name;
 		this.founded = founded;
 		this.origin = origin;

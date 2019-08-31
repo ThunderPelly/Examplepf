@@ -16,7 +16,7 @@
 	<hr />
 	<!-- Suchfunktion -->
 	<h:form>
-		<h:outputText value="Search for companies with AJAX" styleClass="header" />
+		<h:outputText value="Search for filteredCompanies with AJAX" styleClass="header" />
 		<br />
 		<h:panelGrid columns="2">
 			<h:outputText value="Name: " />
@@ -33,7 +33,7 @@
 		<!--  Auflistung  -->
 		<h:outputText value="Companies" styleClass="header" />
 		<h:panelGroup id="searchResults">
-			<h:dataTable value="#{companyCatalogBean.companies}" var="company" rendered="#{not empty companyCatalogBean.companies}">
+			<h:dataTable value="#{companyCatalogBean.filteredCompanies}" var="company" rendered="#{not empty companyCatalogBean.filteredCompanies}">
 				<h:column>
 					<f:facet name="header">
 						<h:outputText value="Name" />
@@ -56,11 +56,25 @@
 		</h:panelGroup>
 
 		<hr />
+		<h:outputText id="messages" value="#{companyCatalogBean.message}" styleClass="Message" />
+		<hr/>
 
-		<h:outputText id="messages" value="#{companyCatalogBean.message}" styleClass="errorMessage" />
+		<h:panelGrid id="newcompany" columns="2">
+			<h:outputText value="Name: " />
+			<h:inputText id="name" value="#{companyCatalogBean.company.name}">
+			</h:inputText>
+			<h:outputText value="Origin: " />
+			<h:inputText id="origin" value="#{companyCatalogBean.company.origin}">
+			</h:inputText>
+			<h:outputText value="Founded: " />
+			<h:inputText id="founded" value="#{companyCatalogBean.company.founded}">
+			</h:inputText>
+			<h:commandButton value="Add Company">
+				<f:ajax event="click" render="messages searchResults" execute="founded name origin" listener="#{companyCatalogBean.addCompanyBySubmit}" />
+			</h:commandButton>
+		</h:panelGrid>
 
 	</h:form>
-
 
 </h:body>
 

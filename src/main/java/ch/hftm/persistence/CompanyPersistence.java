@@ -27,7 +27,7 @@ public class CompanyPersistence {
 
 	public void insert(Company company) {
 		entityManager.getTransaction().begin();
-		this.entityManager.persist(company);
+		entityManager.persist(company);
 		entityManager.getTransaction().commit();
 	}
 
