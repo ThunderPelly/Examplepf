@@ -54,20 +54,26 @@ public class CompanyCatalog {
 		return companies;
 	}
 
-	public synchronized List<Company> searchCompany(String name, String origin) throws Exception {
-		if (name.isEmpty() && origin.isEmpty()) {
+	public synchronized List<Company> searchCompany(String searchinput) throws Exception {
+		if (searchinput.isEmpty()) {
 			throw new Exception();
 		}
-		name = name.toLowerCase();
-		origin = origin.toLowerCase();
-
+		searchinput = searchinput.toLowerCase();
+		String[] inputs = searchinput.split("\\s");
 		List<Company> results = new ArrayList<Company>();
 		for (Company company : companies) {
-			if (company.getName().toLowerCase().contains(name) &&
-					company.getOrigin().toLowerCase().contains(origin)
-					) {
+			boolean add = false;
+			for (String input : inputs){
+				if (company.getName().toLowerCase().contains(input) ||
+						company.getOrigin().toLowerCase().contains(input)
+						|| String.valueOf(company.getFounded()).contains(input) ) {
+					add = true;
+				}
+			}
+			if (add){
 				results.add(clone(company));
 			}
+
 		}
 		return results;
 	}

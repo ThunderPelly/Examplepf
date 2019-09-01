@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.AjaxBehaviorListener;
 import javax.inject.Named;
 
 import ch.hftm.business.CompanyCatalog;
@@ -21,9 +22,7 @@ public class CompanyCatalogBean implements Serializable {
 	private CompanyCatalog companyCatalog = CompanyCatalog.getInstance();
 	private Company selectedCompany;
 
-	private String name = "";
-	private int founded;
-	private String origin ="";
+	private String searchfield = "";
 	private List<Company> filteredCompanies = new ArrayList<>();
 	private String message;
 	private static final int MIN_SEARCH_LENGTH = 2;
@@ -35,28 +34,12 @@ public class CompanyCatalogBean implements Serializable {
 		this.filteredCompanies = companyCatalog.getAllCompanies();
 	}
 	
-	public String getName() {
-		return name;
+	public String getSearchfield() {
+		return searchfield;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getFounded() {
-		return founded;
-	}
-
-	public void setFounded(int founded) {
-		this.founded = founded;
-	}
-
-	public String getOrigin() {
-		return origin;
-	}
-
-	public void setOrigin(String origin) {
-		this.origin = origin;
+	public void setSearchfield(String searchfield) {
+		this.searchfield = searchfield;
 	}
 
 	public List<Company> getFilteredCompanies() {
@@ -95,35 +78,45 @@ public class CompanyCatalogBean implements Serializable {
 		this.company = company;
 	}
 
-	public void addCompanyBySubmit(AjaxBehaviorEvent ev){
+	public void addCompanyBySubmit(){
 		filteredCompanies = companyCatalog.addCompany(company);
 		message = "added company";
-		company = new Company();
+		saveMessage();
 	}
 
 	public String searchCompanies() {
 		message = null;
 		try {
-			filteredCompanies = companyCatalog.searchCompany(name, origin);
+			filteredCompanies = companyCatalog.searchCompany(searchfield);
 			if (filteredCompanies.isEmpty()) {
 				message = "No matching company found";
+				saveMessage();
 			} else {
 				return null;
 			}
 		} catch (Exception e) {
 			message = "Search criteria are missing";
+			saveMessage();
 		}
 		return null;
 	}
 
 	public void searchCompaniesByTiping(AjaxBehaviorEvent ev) {
 		message = null;
-		if (name.length() > MIN_SEARCH_LENGTH || origin.length() > MIN_SEARCH_LENGTH) {
+		if (searchfield.length() > MIN_SEARCH_LENGTH) {
 			searchCompanies();
 		}
 		else {
 			message = "waiting for more search criteria...";
 			filteredCompanies = getAllCompanies();
+		}
+		saveMessage();
+	}
+
+	public void saveMessage() {
+		if (message != null) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage("Successful", message) );
 		}
 	}
 
