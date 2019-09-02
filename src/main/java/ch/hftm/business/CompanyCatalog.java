@@ -48,8 +48,11 @@ public class CompanyCatalog {
 	}
 
 	public synchronized List<Company> addCompany(Company company){
-		companies.add(company);
-		persistence.insert(company);
+		Company newcomp = new Company();
+		newcomp.setOrigin(company.getOrigin());
+		newcomp.setName(company.getName());
+		newcomp.setFounded(company.getFounded());
+		persistence.insert(newcomp);
 		companies = persistence.getAll();
 		return companies;
 	}
@@ -73,7 +76,6 @@ public class CompanyCatalog {
 			if (add){
 				results.add(clone(company));
 			}
-
 		}
 		return results;
 	}

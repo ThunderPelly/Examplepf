@@ -1,6 +1,6 @@
 package ch.hftm.presentation;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +81,9 @@ public class CompanyCatalogBean implements Serializable {
 	public void addCompanyBySubmit(){
 		filteredCompanies = companyCatalog.addCompany(company);
 		message = "added company";
+		company.setFounded(0);
+		company.setName("");
+		company.setOrigin("");
 		saveMessage();
 	}
 
@@ -119,5 +122,4 @@ public class CompanyCatalogBean implements Serializable {
 			context.addMessage(null, new FacesMessage("Successful", message) );
 		}
 	}
-
 }
