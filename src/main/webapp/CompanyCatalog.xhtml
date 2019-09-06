@@ -1,81 +1,57 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition
+		xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  template="./template.xhtml">
+	<ui:define name="content">
+		<p:growl id="messages" showDetail="true" sticky="false"/>
+		<!-- Suchfunktion -->
+		<h:form>
+			<div class="hero is-fullheight">
+				<div class="hero-head">
+					<h:panelGroup class="search level">
+						<p:inputText styleClass="level-item" value="#{companyCatalogBean.searchfield}" placeholder="search">
+							<f:ajax event="keyup" render="searchResults messages" execute="@this" listener="#{companyCatalogBean.searchCompaniesByTiping}" />
+						</p:inputText>
+					</h:panelGroup>
+				</div>
 
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
-	
-	
-<h:head>
-	<title>Company</title>
-	<h:outputStylesheet name="styles.css" />
-</h:head>
+				<!--  Auflistung  -->
+				<h:panelGroup id="searchResults" styleClass="hero-body">
+					<div class="container">
+						<p:outputLabel value="Managed Companies" styleClass="is-size-3"/>
+						<p:dataTable class="table" scrollable="true" scrollHeight="500" value="#{companyCatalogBean.filteredCompanies}" var="company">
+							<p:column headerText="Name">
+								<h:outputText value="#{company.name}" />
+							</p:column>
+							<p:column headerText="Origin">
+								<h:outputText value="#{company.origin}" />
+							</p:column>
+							<p:column headerText="Founded">
+								<h:outputText value="#{company.founded}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</h:panelGroup>
+				<p:commandButton styleClass="button is-info" value="add company" type="button" onclick="PF('newcompany').show();" icon="pi pi-plus"  />
+			</div>
 
-<h:body>
-	<hr />
-	<!-- Suchfunktion -->
-	<h:form>
-		<h:outputText value="Search for filteredCompanies with AJAX" styleClass="header" />
-		<br />
-		<h:panelGrid columns="2">
-			<h:outputText value="Name: " />
-			<h:inputText value="#{companyCatalogBean.name}">
-				<f:ajax event="keyup" render="searchResults messages" execute="@this" listener="#{companyCatalogBean.searchCompaniesByTiping}" />
-			</h:inputText>
-			<h:outputText value="Origin: " />
-			<h:inputText value="#{companyCatalogBean.origin}">
-				<f:ajax event="keyup" render="searchResults messages" execute="@this" listener="#{companyCatalogBean.searchCompaniesByTiping}" />
-			</h:inputText>
-		</h:panelGrid>
+			<!-- Hinzufügen -->
+			<p:dialog header="Add company" widgetVar="newcompany" modal="true" minHeight="150">
+				<h:panelGrid id="newcompany" columns="2">
+					<h:outputText value="Name: " />
+					<p:inputText id="searchfield" value="#{companyCatalogBean.company.name}"/>
+					<h:outputText value="Origin: " />
+					<p:inputText id="origin" value="#{companyCatalogBean.company.origin}"/>
+					<h:outputText value="Founded: " />
+					<p:inputText id="founded" value="#{companyCatalogBean.company.founded}"/>
+					<p:commandButton value="save company" id="ajax" ajax="false" update="messages searchResults" process="founded searchfield origin" action="#{companyCatalogBean.addCompanyBySubmit}" styleClass="ui-priority-primary" />
+				</h:panelGrid>
+			</p:dialog>
 
-		<hr />
-		<!--  Auflistung  -->
-		<h:outputText value="Companies" styleClass="header" />
-		<h:panelGroup id="searchResults">
-			<h:dataTable value="#{companyCatalogBean.filteredCompanies}" var="company" rendered="#{not empty companyCatalogBean.filteredCompanies}">
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="Name" />
-					</f:facet>
-					<h:outputText value="#{company.name}" />
-				</h:column>
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="Origin" />
-					</f:facet>
-					<h:outputText value="#{company.origin}" />
-				</h:column>
-				<h:column>
-					<f:facet name="header">
-						<h:outputText value="Founded" />
-					</f:facet>
-					<h:outputText value="#{company.founded}" />
-				</h:column>
-			</h:dataTable>
-		</h:panelGroup>
-
-		<hr />
-		<h:outputText id="messages" value="#{companyCatalogBean.message}" styleClass="Message" />
-		<hr/>
-
-		<h:panelGrid id="newcompany" columns="2">
-			<h:outputText value="Name: " />
-			<h:inputText id="name" value="#{companyCatalogBean.company.name}">
-			</h:inputText>
-			<h:outputText value="Origin: " />
-			<h:inputText id="origin" value="#{companyCatalogBean.company.origin}">
-			</h:inputText>
-			<h:outputText value="Founded: " />
-			<h:inputText id="founded" value="#{companyCatalogBean.company.founded}">
-			</h:inputText>
-			<h:commandButton value="Add Company">
-				<f:ajax event="click" render="messages searchResults" execute="founded name origin" listener="#{companyCatalogBean.addCompanyBySubmit}" />
-			</h:commandButton>
-		</h:panelGrid>
-
-	</h:form>
-
-</h:body>
-
-</html>
+		</h:form>
+	</ui:define>
+</ui:composition>

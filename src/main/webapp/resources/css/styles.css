@@ -1,22 +1,18 @@
 .header {
-	font-family: Arial, sans-serif;
+	font-family: sans-serif;
 	font-size: 20pt;
 	font-weight: bold;
-	color: green;
+	color: blue;
 	line-height: 50pt;
 }
 
 th {
 	text-align: left;
 	padding-right: 5pt;
-	color: green;
+	color: blue;
 }
 
 td {
 	vertical-align: top;
 	padding-right: 5pt;
-}
-
-.errorMessage {
-	color: red;
 }
