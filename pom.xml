@@ -20,7 +20,7 @@
 
 		<servlet.version>3.1.0</servlet.version>
 		<javaee.version>8.0</javaee.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 	</properties>
 
 	<dependencies>
